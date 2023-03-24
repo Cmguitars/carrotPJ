@@ -9,15 +9,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Slf4j
@@ -64,14 +68,6 @@ public class PostController {
 
         //DB에 insert
         postService.insertPost(postDto);
-
-        for(MultipartFile uploadFile: uploadFiles){
-            String orgName = uploadFile.getOriginalFilename();
-            String savedName = orgName.substring(orgName.lastIndexOf("\\")+1);
-            log.info("fileName:"+savedName);
-            Path savePath = Paths.get("c:\\upload\\"+savedName);  //Path 임포트:java.nio.file.Path
-            uploadFile.transferTo(savePath); //throws 예외처리.
-        }
 
 
         return "post/board";
